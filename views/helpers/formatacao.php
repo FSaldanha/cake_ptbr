@@ -68,34 +68,39 @@ class FormatacaoHelper extends AppHelper {
 	}
 
 /**
- * Mostrar a data completa
+ * Mesmo que o anterior, porém sem mostrar o horário
+ * Modificado por FSaldanha - http://fsaldanha.com.br
  *
  * @param integer $dataHora Data e hora em timestamp ou null para atual
- * @return string Descrição da data no estilo "Sexta-feira", 01 de Janeiro de 2010, 00:00:00"
+ * @return string Descrição da data no estilo "Sexta-feira, 01 de Janeiro de 2010"
  * @access public
  */
-	function dataCompleta($dataHora = null) {
+	function apenasData($dataHora = null) {
 		$_diasDaSemana = array('Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado');
-		$_meses = array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
+		$_meses = array('janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro');
 
 		$dataHora = $this->_ajustaDataHora($dataHora);
 		$w = date('w', $dataHora);
 		$n = date('n', $dataHora) - 1;
 
-		return sprintf('%s, %02d de %s de %04d, %s', $_diasDaSemana[$w], date('d', $dataHora), $_meses[$n], date('Y', $dataHora), date('H:i:s', $dataHora));
+		return sprintf('%s, %02d de %s de %04d', $_diasDaSemana[$w], date('d', $dataHora), $_meses[$n], date('Y', $dataHora));
 	}
 
 /**
- * Se a data for nula, usa data atual
+ * Tenta formatar a data com srttotime(). Se for nula, usa data atual
+ * Modificado por FSaldanha - http://fsaldanha.com.br
  *
  * @param mixed $data
- * @return integer Se null, retorna a data/hora atual
+ * @return integer Data e hora em timestamp. Se null, retorna a data/hora atual
  * @access protected
  */
 	function _ajustaDataHora($data) {
+		
 		if (is_null($data)) {
 			return time();
-		}
+		} else {
+			$data = strtotime($data);
+		}		
 		return $data;
 	}
 
